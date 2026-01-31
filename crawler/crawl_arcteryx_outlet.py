@@ -1,6 +1,4 @@
 import pymysql
-from datetime import datetime
-from playwright.sync_api import sync_playwright
 from db import get_conn, upsert_product, upsert_stock
 from parser import parse_item
 from config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
