@@ -3,7 +3,6 @@ from config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
 
 BRAND_ID = 1   # Arc'teryx
 
-
 def get_conn():
     return pymysql.connect(
         host=MYSQL_HOST,

@@ -5,10 +5,19 @@ from config import MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB
 from playwright.sync_api import sync_playwright
 
 seen_skus = set()
-
-
-TARGET_URL = "https://outlet.arcteryx.com/us/en/c/mens/just-landed/wid-39r1kkxj"
 BRAND_ID = 1   # Arc'teryx 在 brands 表中的 id
+
+TARGET_PAGES = [
+    {
+        "url": "https://outlet.arcteryx.com/us/en/c/mens/",
+        "gender": "male"
+    },
+    {
+        "url": "https://outlet.arcteryx.com/us/en/c/womens/",
+        "gender": "female"
+    }
+]
+
 
 
 # =====================================================
@@ -54,9 +63,10 @@ def infer_season(category: str):
 # =====================================================
 def upsert_product(cursor, product):
     cursor.execute(
-        "SELECT id FROM products WHERE product_url = %s",
-        (product["product_url"],)
+        "SELECT id FROM products WHERE product_url = %s AND target_gender = %s",
+        (product["product_url"], product["target_gender"])
     )
+
     row = cursor.fetchone()
     if row:
         return row["id"]
@@ -105,9 +115,9 @@ def upsert_stock(cursor, product_id, stock):
 # =====================================================
 # 主爬虫逻辑（监听接口）
 # =====================================================
-seen_skus = set()   # 防止重复输出
+seen_products = set()  # 根据 gender + sku 去重
 
-def crawl():
+def crawl(target_url: str, gender: str):
     conn = get_conn()
     cursor = conn.cursor()
 
@@ -139,17 +149,23 @@ def crawl():
 
                 print(f"\n🎯 捕获商品接口（{len(items)} items）")
 
+                # sku + gender 去重
                 for item in items:
                     try:
                         sku = item.get("sku")
-                        if not sku or sku in seen_skus:
+                        if not sku:
                             continue
-                        seen_skus.add(sku)
+                        key = (sku, gender)
+                        if key in seen_products:
+                            continue
+
+                        seen_products.add(key)
 
                         # =========================
                         # 1️⃣ JSON → 结构化数据
                         # =========================
                         product, stock = parse_item(item)
+                        product["target_gender"] = gender
 
                         # =========================
                         # 2️⃣ 写入 MySQL
@@ -177,9 +193,9 @@ def crawl():
         page.on("response", handle_response)
 
         print("🚀 打开页面")
-        page.goto(TARGET_URL, timeout=30000)
+        page.goto(target_url, timeout=30000)
 
-        # 👇 触发懒加载（非常关键）
+        # 👇 触发懒加载
         for _ in range(6):
             page.mouse.wheel(0, 2000)
             page.wait_for_timeout(2000)
@@ -193,4 +209,10 @@ def crawl():
 
 # =====================================================
 if __name__ == "__main__":
-    crawl()
+    if __name__ == "__main__":
+        for page in TARGET_PAGES:
+            crawl(page["url"], page["gender"])
+
+        print("\n===================================")
+        print(f"🎉 本次共爬取商品数（SKU + gender）：{len(seen_products)}")
+        print("===================================")

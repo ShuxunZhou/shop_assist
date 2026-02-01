@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="41afe290-5f09-494b-b381-8b29390ab9b2" name="Changes" comment="完成Arcteryx outlets页面接口爬虫，实现本地SQL存放爬取数据。">
-      <change afterPath="$PROJECT_DIR$/agent/graph.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/llm.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/run_agent.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/agent/tools.py" afterDir="false" />
+    <list default="true" id="41afe290-5f09-494b-b381-8b29390ab9b2" name="Changes" comment="接入Qwen llm，初步实现大模型查询数据库结果返回。">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/crawler/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crawler/crawl_arcteryx_outlet.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/crawl_arcteryx_outlet.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/crawler/db.py" beforeDir="false" afterPath="$PROJECT_DIR$/crawler/db.py" afterDir="false" />
     </list>
@@ -34,6 +29,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "ShuxunZhou"
+  }
+}]]></component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/ShuxunZhou/shop_assist.git",
+    "accountId": "05fe01d6-0b91-408a-a0c4-33062606892e"
+  }
+}]]></component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -64,7 +71,7 @@
       <recent name="$PROJECT_DIR$/crawler" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.run_agent">
+  <component name="RunManager" selected="Python.crawl_arcteryx_outlet">
     <configuration name="crawl_arcteryx_outlet" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="shop_agent" />
       <option name="ENV_FILES" value="" />
@@ -133,9 +140,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.crawl_arcteryx_outlet" />
         <item itemvalue="Python.run_agent" />
         <item itemvalue="Python.llm" />
-        <item itemvalue="Python.crawl_arcteryx_outlet" />
       </list>
     </recent_temporary>
   </component>
@@ -170,12 +177,21 @@
       <option name="project" value="LOCAL" />
       <updated>1768975734813</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="接入Qwen llm，初步实现大模型查询数据库结果返回。">
+      <option name="closed" value="true" />
+      <created>1769837737140</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1769837737140</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="完成Arcteryx outlets页面接口爬虫，实现本地SQL存放爬取数据。" />
-    <option name="LAST_COMMIT_MESSAGE" value="完成Arcteryx outlets页面接口爬虫，实现本地SQL存放爬取数据。" />
+    <MESSAGE value="接入Qwen llm，初步实现大模型查询数据库结果返回。" />
+    <option name="LAST_COMMIT_MESSAGE" value="接入Qwen llm，初步实现大模型查询数据库结果返回。" />
   </component>
   <component name="github-copilot-workspace">
     <instructionFileLocations>
