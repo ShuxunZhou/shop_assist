@@ -27,6 +27,8 @@ def call_get_schema(state: SQLState):
 # 第三个节点：直接采用langgraph提供的ToolNode，执行 get_schema_tool 工具
 get_schema_node = ToolNode([get_schema_tool], name="get_schema")
 
+# 下方保存提示词模板：
+# 节点4：生成 SQL 查询的系统提示词模板
 generate_query_system_prompt = """
 你是一个设计用于与SQL数据库交互的智能体。
 给顶一个输入问题，创建一个语法正确的{dialect}查询来运行，
@@ -41,3 +43,21 @@ generate_query_system_prompt = """
     dialect=db.dialect,
     top_k=5
 )
+
+# 节点5：检查 SQL 语法的系统提示词模板
+query_check_system = """
+你是一个SQL语法检查助手，负责检查用户生成的SQL查询语句是否符合SQL语法规范。
+请仔细检查SQLite查询中的常见错误，包括：
+- Using NOT IN with NULL values
+- Using UNION when UNION ALL should have been used
+- Using BETWEEN for exclusive ranges
+- Data type mismatch in predicates
+- Properly quoting identifiers
+- Using the correct number of arguments for functions
+- Casting to the correct data type
+- Using the proper columns for joins
+
+如果发现上述任何错误，请重写查询。如果没有错误，请原样返回查询语句。
+
+检查完成后，你将调用适当的工具来执行查询。
+"""
