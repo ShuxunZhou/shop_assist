@@ -1,9 +1,5 @@
-from langchain_community.utilities import SQLDatabase
+from agent.mcp_server.mcp_tools import mcp_server
 
 if __name__ == '__main__':
-    db = SQLDatabase.from_uri(
-        'mysql+pymysql://root:1234@localhost:3306/shop_assist'
-    )
 
-    # print(db.get_usable_table_names())
-    # print(db.run('select * from products limit 2'))
+    mcp_server.run(transport='sse')

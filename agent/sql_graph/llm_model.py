@@ -1,5 +1,5 @@
 from langchain_community.chat_models import ChatOpenAI
-from env_utils import ZHIPUAI_API_KEY
+from agent.sql_graph.env_utils import ZHIPUAI_API_KEY
 from zhipuai import ZhipuAI
 
 zhipuai_client = ZhipuAI(api_key=ZHIPUAI_API_KEY)
