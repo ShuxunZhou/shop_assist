@@ -1,4 +1,5 @@
 # 执行工作流
+import asyncio
 
 from langchain_community.utilities import SQLDatabase
 from langchain_community.agent_toolkits import SQLDatabaseToolkit
@@ -6,11 +7,25 @@ from langgraph.graph import MessagesState
 from sqlalchemy.sql.annotation import Annotated
 
 from agent.sql_graph.llm_model import llm
+from agent.sql_graph.text2sql_graph import make_graph
+
 
 # 状态：存储工作流在执行过程中每个节点返回的数据
 # class MyState(TypedDict):
 #     messages: Annotated[list, add_messages]
 
+async def execute_graph():
+    # 在异步环境下执行工作流
+    graph = await make_graph()
+
+    while True:
+        user_input = input("用户：")
+        if user_input.lower() in ["q", "quit", "exit"]:
+            print("对话结束，拜拜！")
+            break
+        else:
+            async for event in graph.stream({"messages":[{"role": "user", "content": user_input}]}, stream_mode="values"):
+                event["messages"][-1].pretty_print()
 
 
 if __name__ == '__main__':
@@ -30,4 +45,5 @@ if __name__ == '__main__':
 #     list_tables_tool = next(tool for tool in tools if tool.name == "sql_db_list_tables")
 #
 #     print(list_tables_tool.invoke(""))
-    pass
+
+    asyncio.run(execute_graph())

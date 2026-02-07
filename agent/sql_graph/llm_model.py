@@ -1,4 +1,4 @@
-from langchain_community.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 from agent.sql_graph.env_utils import ZHIPUAI_API_KEY
 from zhipuai import ZhipuAI
 
