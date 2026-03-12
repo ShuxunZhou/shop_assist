@@ -29,20 +29,30 @@ get_schema_node = ToolNode([get_schema_tool], name="get_schema")
 
 # 下方保存提示词模板：
 # 节点5：生成 SQL 查询的系统提示词模板
-generate_query_system_prompt = """
-你是一个设计用于与SQL数据库交互的智能体。
-给顶一个输入问题，创建一个语法正确的{dialect}查询来运行，
+def get_generate_query_system_prompt():
+    from datetime import date
+    today = date.today().isoformat()
+    return f"""你是一个设计用于与SQL数据库交互的智能体。
+给定一个输入问题，创建一个语法正确的{db.dialect}查询来运行，
 然后查看查询结果并返回答案。除非用户明确指定他们希望获取的示例数量，
-否则始终将查询限制为最多{top_k}条结果。
+否则始终将查询限制为最多5条结果。
 
 你可以按相关列对结果进行排序，以返回数据库中最有趣的示例。
-永远不要查询特定表的所有列，只查询与问题相关的列
+永远不要查询特定表的所有列，只查询与问题相关的列。
 
 不要对数据库进行任何DML语句(INSERT, UPDATE, DELETE)或DDL语句(CREATE, DROP, ALTER)。
-""".format(
-    dialect=db.dialect,
-    top_k=5
-)
+
+当前日期：{today}。用户提到"当季"时，请根据月份判断季节：3-5月=spring, 6-8月=summer, 9-11月=autumn, 12-2月=winter。
+
+重要：当用户提到具体品类时，你必须将其映射为SQL过滤条件，不能忽略。规则如下：
+- 如果品类对应已有的category值（jacket/hoodie/pants），直接用 category = 'xxx' 过滤。
+- "上衣"应匹配 category IN ('jacket', 'hoodie') 或 name LIKE '%shirt%' 等。
+- "外套"、"夹克" → category = 'jacket'
+- "卫衣" → category = 'hoodie'
+- "裤子"、"长裤" → category = 'pants'
+- 其他品类关键词（如"长袖"、"衬衫"、"T恤"等），请用 name LIKE '%关键词%' 模糊匹配。
+- 绝对不要忽略用户提到的品类条件。
+"""
 
 # 节点6：检查 SQL 语法的系统提示词模板
 query_check_system = """

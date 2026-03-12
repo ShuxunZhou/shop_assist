@@ -16,6 +16,7 @@ def get_env(key: str, required: bool = False) -> str | None:
 ALIBABA_API_KEY = get_env("ALIBABA_API_KEY")
 ALIBABA_BASE_URL = get_env("ALIBABA_BASE_URL")
 
+
 # ===== DeepSeek =====
 DEEPSEEK_API_KEY = get_env("DEEPSEEK_API_KEY")
 DEEPSEEK_BASE_URL = get_env("DEEPSEEK_BASE_URL")

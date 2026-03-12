@@ -22,12 +22,16 @@ db = SQLDatabase.from_uri(
 #         print(e)
 #         return '没有搜索到任何内容！'
 
-
-
-@mcp_server.tool('list_tables_tool', description='输入一个空的字符串，输出的是数据库中所有的表名，表名用逗号分隔')
+@mcp_server.tool('list_tables_tool', description='输入一个空的字符串，输出数据库中所有的表名及其注释')
 def list_tables_tool(query: str) -> str:
-    """输入一个空的字符串，输出的是数据库中所有的表名，表名用逗号分隔"""
-    return ", ".join(db.get_usable_table_names())
+    """输入一个空的字符串，输出数据库中所有的表名及其注释"""
+    from sqlalchemy import text
+    with db._engine.connect() as conn:
+        rows = conn.execute(text(
+            "SELECT TABLE_NAME, TABLE_COMMENT FROM information_schema.TABLES "
+            "WHERE TABLE_SCHEMA = DATABASE()"
+        )).fetchall()
+    return "\n".join(f"{name} -- {comment}" for name, comment in rows)
 
 
 @mcp_server.tool()

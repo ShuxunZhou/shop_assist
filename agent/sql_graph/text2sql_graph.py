@@ -15,7 +15,7 @@ from sqlalchemy.util import await_only
 
 from agent.sql_graph.llm_model import llm
 from agent.sql_graph.my_state import SQLState
-from agent.sql_graph.tools_node import generate_query_system_prompt, query_check_system, call_get_schema, \
+from agent.sql_graph.tools_node import get_generate_query_system_prompt, query_check_system, call_get_schema, \
     get_schema_node
 
 #
@@ -81,7 +81,7 @@ async def make_graph():
         # 第五个节点：生成 SQL 查询
         system_message = {
             "role": "system",
-            "content": generate_query_system_prompt
+            "content": get_generate_query_system_prompt()
         }
         # 这里需要把工具绑定到 llm 上，才能在系统提示词中调用工具（但是不强制工具调用，允许模型在获得解决方案时自然响应）
         llm_with_tool = llm.bind_tools([db_query_tool])
